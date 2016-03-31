@@ -1,7 +1,6 @@
 defmodule RethinkDB.Ecto do
   alias RethinkDB.Ecto.NormalizedQuery
 
-  @behaviour Ecto.Adapter
   @behaviour Ecto.Adapter.Storage
 
   defmacro __before_compile__(env) do
@@ -29,6 +28,7 @@ defmodule RethinkDB.Ecto do
 
   def load(:binary_id, data), do: {:ok, data}
 
+  def load(type, %Ecto.Query.Tagged{value: value}), do: load(type, value)
   def load(type, data), do: Ecto.Type.load(type, data, &load/2)
 
   def dump(:binary_id, data), do: {:ok, data}
